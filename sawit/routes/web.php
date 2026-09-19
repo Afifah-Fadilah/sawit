@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\BlokController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -15,7 +16,9 @@ Route::prefix('admin')
         Route::view('/dashboard', 'admin.dashboard')
             ->name('dashboard');
 
-        Route::view('/kelola-blok', 'admin.kelolablok');
+        Route::resource('/blok', BlokController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('admin.blok');
 
         Route::view('/mandor', 'admin.mandor');
 
