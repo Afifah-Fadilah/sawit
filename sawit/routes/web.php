@@ -2,12 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BlokController;
+use App\Http\Controllers\Admin\JenisPekerjaanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::prefix('admin')
     ->middleware(['auth'])
@@ -22,7 +23,9 @@ Route::prefix('admin')
 
         Route::view('/mandor', 'admin.mandor');
 
-        Route::view('/jenis-pekerjaan', 'admin.jenispekerjaan');
+        Route::resource('/jenis-pekerjaan', JenisPekerjaanController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('admin.jenis-pekerjaan');
 
         Route::view('/tarif-upah', 'admin.tarifupah');
 
@@ -39,7 +42,7 @@ Route::prefix('admin')
         Route::view('/pengaturan', 'admin.pengaturan');
     });
 
-    Route::prefix('mandor')
+Route::prefix('mandor')
     ->middleware(['auth'])
     ->group(function () {
 
