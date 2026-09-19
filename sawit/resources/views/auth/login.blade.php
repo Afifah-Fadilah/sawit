@@ -5,10 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin (Login)</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="{{ asset('images/logo.png') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen overflow-hidden">
+<body class="min-h-screen overflow-hidden font-['Poppins']">
 
     <div class="bg-[#f7f6f1] min-h-screen flex flex-col md:flex-row">
 
@@ -28,7 +34,6 @@
 
             <!-- Glass Card -->
             <div class="w-full max-w-md bg-white/30 backdrop-blur-xl border border-white/40 rounded-3xl shadow-xl p-10">
-
 
                 <h1 class="text-3xl font-bold text-green-800 text-center mb-1">Masuk</h1>
                 <p class="text-center text-sm text-gray-600 mb-6">
@@ -64,13 +69,12 @@
 
                             <button type="button"
                                 onclick="const el=document.getElementById('password'); 
-                         const isPassword = el.type === 'password';
-                         el.type = isPassword ? 'text' : 'password';
-                         document.getElementById('eye-open').classList.toggle('hidden', isPassword);
-                         document.getElementById('eye-closed').classList.toggle('hidden', !isPassword);"
+                        const isPassword = el.type === 'password';
+                        el.type = isPassword ? 'text' : 'password';
+                        document.getElementById('eye-open').classList.toggle('hidden', isPassword);
+                        document.getElementById('eye-closed').classList.toggle('hidden', !isPassword);"
                                 class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800">
 
-                                <!-- Icon mata terbuka (default, password tersembunyi) -->
                                 <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -79,7 +83,6 @@
                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
 
-                                <!-- Icon mata tercoret (muncul saat password terlihat) -->
                                 <svg id="eye-closed" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden"
                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
