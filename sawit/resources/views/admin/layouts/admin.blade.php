@@ -21,7 +21,7 @@
         .kp-sidebar { view-transition-name: kp-sidebar; }
         .kp-topbar  { view-transition-name: kp-topbar; }
         ::view-transition-old(root),
-        ::view-transition-new(root) { transition: opacity .3s ease; }
+        ::view-transition-new(root) { animation-duration: .15s; }
 
         @media (prefers-reduced-motion: reduce) {
             @view-transition { navigation: none; }
@@ -33,7 +33,7 @@
 
     <div class="kp-main">
         @include('admin.components.header', ['title' => $__env->yieldContent('title', 'Dashboard')])
-        
+
         <main class="kp-content">
             @yield('content')
         </main>
