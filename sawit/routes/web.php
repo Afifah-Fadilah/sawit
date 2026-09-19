@@ -7,14 +7,16 @@ Route::get('/', function () {
     return view('auth/login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::prefix('admin')->group(function () {
+    Route::view('/dashboard', 'admin.dashboard');
+    Route::view('/kelola-blok', 'admin.kelolablok');
+    Route::view('/mandor', 'admin.mandor');
+    Route::view('/jenis-pekerjaan', 'admin.jenispekerjaan');
+    Route::view('/tarif-upah', 'admin.tarifupah');
+    Route::view('/pekerja', 'admin.pekerja');
+    Route::view('/hasil-kerja', 'admin.hasilkerja');
+    Route::view('/kasbon', 'admin.kasbon');
+    Route::view('/laporan-hasil-kerja', 'admin.laporanhasilkerja');
+    Route::view('/laporan-upah', 'admin.laporanupah');
+    Route::view('/pengaturan', 'admin.pengaturan');
 });
-
-require __DIR__.'/auth.php';
