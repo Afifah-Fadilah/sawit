@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BlokController;
+use App\Http\Controllers\Admin\PekerjaController;
+use App\Http\Controllers\Admin\JenisPekerjaanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -22,11 +24,15 @@ Route::prefix('admin')
 
         Route::view('/mandor', 'admin.mandor');
 
-        Route::view('/jenis-pekerjaan', 'admin.jenispekerjaan');
+        Route::resource('/jenis-pekerjaan', JenisPekerjaanController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('admin.jenis-pekerjaan');
 
         Route::view('/tarif-upah', 'admin.tarifupah');
 
-        Route::view('/pekerja', 'admin.pekerja');
+        Route::resource('/pekerja', PekerjaController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('admin.pekerja');
 
         Route::view('/hasil-kerja', 'admin.hasilkerja');
 
