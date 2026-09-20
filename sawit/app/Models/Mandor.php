@@ -33,4 +33,9 @@ class Mandor extends Model
             'blok_id'
         )->withTimestamps();
     }
+
+    public function jadwal()
+{
+    return $this->hasOne(JadwalMandor::class);
+}
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\PekerjaController;
 use App\Http\Controllers\Admin\JenisPekerjaanController;
 use App\Http\Controllers\Admin\MandorController;
 use App\Http\Controllers\Admin\JadwalMandorController;
+use App\Http\Controllers\Mandor\DashboardController as MandorDashboardController;
+use App\Http\Controllers\Admin\TarifUpahController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -27,9 +29,6 @@ Route::prefix('admin')
         // ==== MANDOR ====
         Route::resource('/mandor', MandorController::class)
             ->only(['index', 'store', 'update', 'destroy']);
-
-        // Route::put('/mandor/{mandor}', [MandorController::class, 'update'])
-        //     ->name('mandor.update');
 
         Route::put('/mandor/{mandor}/akun', [MandorController::class, 'updateAkun'])
             ->name('mandor.akun.update');
@@ -53,8 +52,8 @@ Route::prefix('admin')
         Route::resource('/pekerja', PekerjaController::class)
             ->only(['index', 'store', 'update', 'destroy']);
 
-        Route::view('/tarif-upah', 'admin.tarifupah')
-            ->name('tarifupah');
+        Route::resource('/tarif-upah', TarifUpahController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 
         Route::view('/hasil-kerja', 'admin.hasilkerja')
             ->name('hasilkerja');
@@ -77,7 +76,7 @@ Route::prefix('mandor')
     ->name('mandor.')
     ->group(function () {
 
-        Route::view('/dashboard', 'mandor.dashboard')
+        Route::get('/dashboard', [MandorDashboardController::class, 'index'])
             ->name('dashboard');
 
         Route::view('/input-data-harian', 'mandor.input-data')
