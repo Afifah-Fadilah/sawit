@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('kode_mandor', 20)->unique();   // MDR001, MDR002, ...
             $table->string('nama', 100);
             $table->string('phone', 20);
-            $table->string('afdeling', 100);                // contoh: Afdeling I
-            $table->string('blok_kelola', 100);              // contoh: Blok 1 - 2 (bebas teks, atau relasi ke blok kalau 1 blok per mandor)
+            $table->string('afdeling', 100)->nullable();     // diisi belakangan lewat tab Jadwal Mandor
+            $table->string('blok_kelola', 100)->nullable();  // diisi belakangan lewat tab Jadwal Mandor
             $table->string('status', 20)->default('aktif');  // aktif / nonaktif
             $table->timestamps();
 

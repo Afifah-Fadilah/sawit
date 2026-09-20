@@ -3,7 +3,7 @@
 // app/Models/Blok.php
 
 namespace App\Models;
-
+use App\Models\Pekerja;
 use Illuminate\Database\Eloquent\Model;
 
 class Blok extends Model
@@ -22,4 +22,9 @@ class Blok extends Model
         'luas' => 'decimal:2',
         'tahun_tanam' => 'integer',
     ];
+
+        public function pekerjas()
+    {
+        return $this->hasMany(Pekerja::class, 'blok_id');
+    }
 }

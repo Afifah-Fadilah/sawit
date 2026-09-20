@@ -1,13 +1,22 @@
 <?php
-// app/Models/Mandor.php
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Mandor extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'user_id', 'kode_mandor', 'nama', 'phone', 'afdeling', 'blok_kelola', 'status',
+        'user_id',
+        'kode_mandor',
+        'nama',
+        'phone',
+        'afdeling',
+        'blok_kelola',
+        'status',
     ];
 
     public function user()
@@ -15,8 +24,13 @@ class Mandor extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function jadwal()
+    public function bloks()
     {
-        return $this->hasMany(JadwalMandor::class);
+        return $this->belongsToMany(
+            Blok::class,
+            'mandor_blok',
+            'mandor_id',
+            'blok_id'
+        )->withTimestamps();
     }
 }

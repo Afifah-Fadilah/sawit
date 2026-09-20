@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BlokController;
 use App\Http\Controllers\Admin\PekerjaController;
 use App\Http\Controllers\Admin\JenisPekerjaanController;
+use App\Http\Controllers\Admin\MandorController;
+use App\Http\Controllers\Admin\JadwalMandorController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -20,23 +22,14 @@ Route::prefix('admin')
             ->name('dashboard');
 
         Route::resource('/blok', BlokController::class)
-            ->only(['index', 'store', 'update', 'destroy'])
-            ->names('blok');
+            ->only(['index', 'store', 'update', 'destroy']);
 
         // ==== MANDOR ====
-        Route::get('/mandor', [MandorController::class, 'index'])
-            ->name('mandor.index');
+        Route::resource('/mandor', MandorController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
 
-        Route::resource('/jenis-pekerjaan', JenisPekerjaanController::class)
-            ->only(['index', 'store', 'update', 'destroy'])
-            ->names('admin.jenis-pekerjaan');
-
-        Route::put('/mandor/{mandor}', [MandorController::class, 'update'])
-            ->name('mandor.update');
-
-        Route::resource('/pekerja', PekerjaController::class)
-            ->only(['index', 'store', 'update', 'destroy'])
-            ->names('admin.pekerja');
+        // Route::put('/mandor/{mandor}', [MandorController::class, 'update'])
+        //     ->name('mandor.update');
 
         Route::put('/mandor/{mandor}/akun', [MandorController::class, 'updateAkun'])
             ->name('mandor.akun.update');
@@ -54,14 +47,14 @@ Route::prefix('admin')
             ->name('mandor.jadwal.destroy');
         // ==== END MANDOR ====
 
-        Route::view('/jenis-pekerjaan', 'admin.jenispekerjaan')
-            ->name('jenispekerjaan');
+        Route::resource('/jenis-pekerjaan', JenisPekerjaanController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
+
+        Route::resource('/pekerja', PekerjaController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
 
         Route::view('/tarif-upah', 'admin.tarifupah')
             ->name('tarifupah');
-
-        Route::view('/pekerja', 'admin.pekerja')
-            ->name('pekerja');
 
         Route::view('/hasil-kerja', 'admin.hasilkerja')
             ->name('hasilkerja');

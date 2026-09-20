@@ -18,8 +18,20 @@ class JadwalMandor extends Model
         return $this->belongsTo(Mandor::class);
     }
 
+    /**
+     * Kolom blok_id lama (blok pertama). Dipertahankan supaya kode lain
+     * yang masih memanggil $jadwal->blok tidak error.
+     */
     public function blok()
     {
         return $this->belongsTo(Blok::class);
+    }
+
+    /**
+     * Relasi baru: satu jadwal bisa punya sampai 2 blok.
+     */
+    public function bloks()
+    {
+        return $this->belongsToMany(Blok::class, 'blok_jadwal_mandor');
     }
 }
