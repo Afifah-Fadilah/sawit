@@ -18,6 +18,11 @@ class JenisPekerjaan extends Model
         'status',
     ];
 
+    public function tarifUpah()
+    {
+        return $this->hasOne(TarifUpah::class);
+    }
+
     // Daftar tetap 4 jenis pekerjaan yang diizinkan (sesuai enum di database)
     public const JENIS_OPSI = ['Pemanen', 'Pemberondol', 'Pemupuk', 'Penyemprot'];
 }
