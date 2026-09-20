@@ -6,7 +6,7 @@
 
 <style>
     .kp-topcard {
-        margin: 16px 16px 0;
+        margin: 0px 16px 0;
         padding: 18px 20px 22px;
         border-radius: 22px;
         background: linear-gradient(135deg, #a9b388 0%, #5f6f52 100%);

@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\MandorController;
 use App\Http\Controllers\Admin\JadwalMandorController;
 use App\Http\Controllers\Mandor\DashboardController as MandorDashboardController;
 use App\Http\Controllers\Admin\TarifUpahController;
+use App\Http\Controllers\Mandor\InputDataController;
+use App\Http\Controllers\Mandor\RiwayatController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -79,11 +81,17 @@ Route::prefix('mandor')
         Route::get('/dashboard', [MandorDashboardController::class, 'index'])
             ->name('dashboard');
 
-        Route::view('/input-data-harian', 'mandor.input-data')
-            ->name('input');
+        Route::get('/input-data-harian', [InputDataController::class, 'index'])
+    ->name('input');
 
-        Route::view('/riwayat', 'mandor.riwayat')
+Route::post('/input-data-harian', [InputDataController::class, 'store'])
+    ->name('input.store');
+
+        Route::get('/riwayat', [RiwayatController::class, 'index'])
             ->name('riwayat');
+
+        Route::get('/riwayat/unduh', [RiwayatController::class, 'unduh'])
+            ->name('riwayat.unduh');
 
         Route::view('/akun', 'mandor.akun')
             ->name('akun');
