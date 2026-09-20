@@ -645,7 +645,7 @@
                                         </div>
                                     </td>
                                     <td>{{ $pekerja->no_hp }}</td>
-                                    <td>{{ $pekerja->jenis_pekerjaan }}</td>
+                                    <td>{{ $pekerja->jenisPekerjaan->jenis ?? '-' }}</td>
                                     <td>{{ $pekerja->blok->nama_blok ?? '-' }}</td>
                                     <td class="kp-c">
                                         <span

@@ -46,15 +46,16 @@
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
 
-                    <!-- Username -->
                     <div class="mb-4">
-                        <label for="name" class="block text-sm font-semibold text-gray-800 mb-1">
+                        <label for="username" class="block text-sm font-semibold text-gray-800 mb-1">
                             Nama Pengguna
                         </label>
-                        <input id="name" type="text" name="name" value="{{ old('name') }}" required
+
+                        <input id="username" type="text" name="username" value="{{ old('username') }}" required
                             autofocus autocomplete="username"
                             class="w-full rounded-xl bg-[#c9cdb8] border-none py-3 px-4 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-green-700">
-                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+
+                        <x-input-error :messages="$errors->get('username')" class="mt-2" />
                     </div>
 
                     <!-- Password -->
