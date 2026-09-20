@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BlokController;
 use App\Http\Controllers\Admin\PekerjaController;
 use App\Http\Controllers\Admin\JenisPekerjaanController;
+use App\Http\Controllers\Admin\MandorController;
+use App\Http\Controllers\Admin\JadwalMandorController;
 
 Route::get('/', function () {
     return redirect()->route('login');
