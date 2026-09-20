@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BlokController;
-use App\Http\Controllers\Admin\MandorController;
-use App\Http\Controllers\Admin\JadwalMandorController;
+use App\Http\Controllers\Admin\PekerjaController;
+use App\Http\Controllers\Admin\JenisPekerjaanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -27,14 +27,16 @@ Route::prefix('admin')
         Route::get('/mandor', [MandorController::class, 'index'])
             ->name('mandor.index');
 
-        Route::post('/mandor', [MandorController::class, 'store'])
-            ->name('mandor.store');
+        Route::resource('/jenis-pekerjaan', JenisPekerjaanController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('admin.jenis-pekerjaan');
 
         Route::put('/mandor/{mandor}', [MandorController::class, 'update'])
             ->name('mandor.update');
 
-        Route::delete('/mandor/{mandor}', [MandorController::class, 'destroy'])
-            ->name('mandor.destroy');
+        Route::resource('/pekerja', PekerjaController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('admin.pekerja');
 
         Route::put('/mandor/{mandor}/akun', [MandorController::class, 'updateAkun'])
             ->name('mandor.akun.update');
