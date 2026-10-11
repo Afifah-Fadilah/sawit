@@ -10,6 +10,10 @@ use App\Http\Controllers\Mandor\DashboardController as MandorDashboardController
 use App\Http\Controllers\Admin\TarifUpahController;
 use App\Http\Controllers\Mandor\InputDataController;
 use App\Http\Controllers\Mandor\RiwayatController;
+use App\Http\Controllers\Admin\HasilKerjaController;
+use App\Http\Controllers\Admin\KasbonController;
+use App\Http\Controllers\Admin\LaporanHasilKerjaController;
+
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -55,13 +59,22 @@ Route::prefix('admin')
             ->only(['index', 'store', 'update', 'destroy']);
 
         Route::resource('/tarif-upah', TarifUpahController::class)
-        ->only(['index', 'store', 'update', 'destroy']);
+            ->only(['index', 'store', 'update', 'destroy']);
 
-        Route::view('/hasil-kerja', 'admin.hasilkerja')
-            ->name('hasilkerja');
+        Route::resource('hasil-kerja', HasilKerjaController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('admin.hasil-kerja');
 
-        Route::view('/kasbon', 'admin.kasbon')
-            ->name('kasbon');
+        // ==== KASBON ====
+        Route::resource('/kasbon', KasbonController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
+
+        Route::patch('/kasbon/{kasbon}/lunas', [KasbonController::class, 'tandaiLunas'])
+            ->name('kasbon.lunas');
+        
+        Route::patch('/kasbon/{kasbon}/batal-lunas', [KasbonController::class, 'batalLunas'])
+            ->name('kasbon.batal-lunas');
+        // ==== END KASBON ====
 
         Route::view('/laporan-hasil-kerja', 'admin.laporanhasilkerja')
             ->name('laporanhasilkerja');
@@ -82,10 +95,10 @@ Route::prefix('mandor')
             ->name('dashboard');
 
         Route::get('/input-data-harian', [InputDataController::class, 'index'])
-    ->name('input');
+            ->name('input');
 
-Route::post('/input-data-harian', [InputDataController::class, 'store'])
-    ->name('input.store');
+        Route::post('/input-data-harian', [InputDataController::class, 'store'])
+            ->name('input.store');
 
         Route::get('/riwayat', [RiwayatController::class, 'index'])
             ->name('riwayat');
