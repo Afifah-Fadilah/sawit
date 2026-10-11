@@ -19,7 +19,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::prefix('admin')
     ->middleware(['auth'])
@@ -71,13 +71,17 @@ Route::prefix('admin')
 
         Route::patch('/kasbon/{kasbon}/lunas', [KasbonController::class, 'tandaiLunas'])
             ->name('kasbon.lunas');
-        
+
         Route::patch('/kasbon/{kasbon}/batal-lunas', [KasbonController::class, 'batalLunas'])
             ->name('kasbon.batal-lunas');
         // ==== END KASBON ====
 
-        Route::view('/laporan-hasil-kerja', 'admin.laporanhasilkerja')
+        Route::get('/laporan-hasil-kerja', [LaporanHasilKerjaController::class, 'index'])
             ->name('laporanhasilkerja');
+
+        Route::get('/laporan-hasil-kerja/unduh', [LaporanHasilKerjaController::class, 'unduh'])
+            ->name('laporanhasilkerja.unduh');
+
 
         Route::view('/laporan-upah', 'admin.laporanupah')
             ->name('laporanupah');
