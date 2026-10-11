@@ -14,26 +14,36 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen overflow-hidden font-['Poppins']">
+{{-- overflow-hidden hanya di desktop. Di HP halaman harus bisa discroll, kalau tidak form terpotong. --}}
+<body class="min-h-screen bg-[#f7f6f1] font-['Poppins'] md:overflow-hidden">
 
-    <div class="bg-[#f7f6f1] min-h-screen flex flex-col md:flex-row">
+    <div class="bg-[#f7f6f1] min-h-[100dvh] flex flex-col md:flex-row">
 
-        <!-- KIRI: Gambar -->
-        <div class="md:w-1/2 relative h-[300px] md:h-screen">
+        <!-- ATAS (HP) / KIRI (desktop): Gambar -->
+        <div class="relative h-[220px] sm:h-[280px] md:h-screen md:w-1/2 overflow-hidden rounded-b-[2rem] md:rounded-none">
+            {{--
+                Di HP gambar dilebarkan 145% dan ditempel ke kiri supaya lekukan putih di sisi kanan
+                gambar (bawaan file bg-sawit2.png) ikut terpotong keluar layar.
+                Angka 145% bisa disetel: makin besar = lekukan makin tersembunyi, gambar makin ter-zoom.
+                Di desktop (md ke atas) tampilannya sama persis seperti sebelumnya.
+            --}}
             <img src="{{ asset('images/bg-sawit2.png') }}" alt="Kelapa Sawit"
-                class="w-full h-full object-cover object-[45%_center]">
+                class="h-full w-[145%] max-w-none object-cover object-[0%_40%] md:w-full md:max-w-full md:object-[45%_center]">
 
-            <div class="absolute top-6 left-6 bg-white rounded-full pl-2 pr-5 py-2 flex items-center gap-2 shadow">
-                <img src="{{ asset('images/logo.png') }}" class="w-8 h-8 rounded-full object-cover">
+            <div
+                class="absolute top-4 left-4 md:top-6 md:left-6 bg-white rounded-full pl-2 pr-4 md:pr-5 py-1.5 md:py-2 flex items-center gap-2 shadow">
+                <img src="{{ asset('images/logo.png') }}" alt="" class="w-8 h-8 rounded-full object-cover">
                 <span class="font-bold text-green-800 text-sm">KELAPAKUY!</span>
             </div>
         </div>
 
-        <!-- KANAN: Form -->
-        <div class="md:w-1/2 flex items-center justify-center p-8 md:h-screen">
+        <!-- BAWAH (HP) / KANAN (desktop): Form -->
+        <div
+            class="relative z-10 flex flex-1 items-start justify-center px-4 pb-10 md:h-screen md:w-1/2 md:flex-none md:items-center md:p-8">
 
-            <!-- Glass Card -->
-            <div class="w-full max-w-md bg-white/30 backdrop-blur-xl border border-white/40 rounded-3xl shadow-xl p-10">
+            <!-- Glass Card: di HP sedikit menimpa gambar supaya terasa menyatu -->
+            <div
+                class="-mt-6 w-full max-w-md rounded-3xl border border-white/40 bg-white/70 px-6 pb-8 pt-8 shadow-xl backdrop-blur-xl md:mt-0 md:bg-white/30 md:p-10">
 
                 <h1 class="text-3xl font-bold text-green-800 text-center mb-1">Masuk</h1>
                 <p class="text-center text-sm text-gray-600 mb-6">
@@ -51,9 +61,11 @@
                             Nama Pengguna
                         </label>
 
+                        {{-- autocapitalize/autocorrect dimatikan: keyboard HP tidak lagi mengubah huruf pertama jadi kapital --}}
                         <input id="username" type="text" name="username" value="{{ old('username') }}" required
-                            autofocus autocomplete="username"
-                            class="w-full rounded-xl bg-[#c9cdb8] border-none py-3 px-4 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-green-700">
+                            autofocus autocomplete="username" autocapitalize="none" autocorrect="off"
+                            spellcheck="false"
+                            class="w-full rounded-xl bg-[#c9cdb8] border-none py-3 px-4 text-base text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-green-700">
 
                         <x-input-error :messages="$errors->get('username')" class="mt-2" />
                     </div>
@@ -66,15 +78,15 @@
                         <div class="relative">
                             <input id="password" type="password" name="password" required
                                 autocomplete="current-password"
-                                class="w-full rounded-xl bg-[#c9cdb8] border-none py-3 px-4 pr-10 text-gray-800 focus:ring-2 focus:ring-green-700">
+                                class="w-full rounded-xl bg-[#c9cdb8] border-none py-3 px-4 pr-12 text-base text-gray-800 focus:ring-2 focus:ring-green-700">
 
-                            <button type="button"
+                            <button type="button" aria-label="Tampilkan atau sembunyikan kata sandi"
                                 onclick="const el=document.getElementById('password'); 
                         const isPassword = el.type === 'password';
                         el.type = isPassword ? 'text' : 'password';
                         document.getElementById('eye-open').classList.toggle('hidden', isPassword);
                         document.getElementById('eye-closed').classList.toggle('hidden', !isPassword);"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800">
+                                class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-600 hover:text-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-700">
 
                                 <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
@@ -95,7 +107,7 @@
                     </div>
 
                     <!-- Remember + Forgot -->
-                    <div class="flex items-center justify-between mt-3 mb-6 text-sm">
+                    <div class="mt-3 mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-sm">
                         <label for="remember_me" class="inline-flex items-center gap-2 text-gray-700">
                             <input id="remember_me" type="checkbox" name="remember"
                                 class="rounded border-gray-400 text-green-700 focus:ring-green-700">
@@ -112,7 +124,7 @@
 
                     <!-- Submit -->
                     <button type="submit"
-                        class="w-full bg-green-800 hover:bg-green-900 text-white font-semibold py-3 rounded-xl transition">
+                        class="w-full bg-green-800 hover:bg-green-900 text-white text-base font-semibold py-3 rounded-xl transition focus:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2">
                         Masuk
                     </button>
                 </form>
