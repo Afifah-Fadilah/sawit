@@ -13,6 +13,8 @@ use App\Http\Controllers\Mandor\RiwayatController;
 use App\Http\Controllers\Admin\HasilKerjaController;
 use App\Http\Controllers\Admin\KasbonController;
 use App\Http\Controllers\Admin\LaporanHasilKerjaController;
+use App\Http\Controllers\Admin\LaporanUpahController;
+use App\Http\Controllers\Mandor\AkunController;
 
 
 Route::get('/', function () {
@@ -106,6 +108,9 @@ Route::prefix('mandor')
         Route::get('/riwayat/unduh', [RiwayatController::class, 'unduh'])
             ->name('riwayat.unduh');
 
-        Route::view('/akun', 'mandor.akun')
+        Route::get('/akun', [AkunController::class, 'index'])
             ->name('akun');
+ 
+        Route::put('/akun/phone', [AkunController::class, 'updatePhone'])
+            ->name('akun.phone');
     });
