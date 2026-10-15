@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BlokController;
 use App\Http\Controllers\Admin\PekerjaController;
 use App\Http\Controllers\Admin\JenisPekerjaanController;
@@ -28,7 +29,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-        Route::view('/dashboard', 'admin.dashboard')
+        Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
 
         Route::resource('/blok', BlokController::class)
@@ -85,8 +86,31 @@ Route::prefix('admin')
             ->name('laporanhasilkerja.unduh');
 
 
-        Route::view('/laporan-upah', 'admin.laporanupah')
+        // ==== LAPORAN UPAH ====
+        Route::get('/laporan-upah', [LaporanUpahController::class, 'index'])
             ->name('laporanupah');
+
+        Route::post('/laporan-upah', [LaporanUpahController::class, 'store'])
+            ->name('laporanupah.store');
+
+        Route::post('/laporan-upah/{laporanUpah}/hitung', [LaporanUpahController::class, 'hitungUlang'])
+            ->name('laporanupah.hitung');
+
+        Route::post('/laporan-upah/{laporanUpah}/finalisasi', [LaporanUpahController::class, 'finalisasi'])
+            ->name('laporanupah.finalisasi');
+
+        Route::post('/laporan-upah/{laporanUpah}/batal-finalisasi', [LaporanUpahController::class, 'batalFinalisasi'])
+            ->name('laporanupah.batal');
+
+        Route::delete('/laporan-upah/{laporanUpah}', [LaporanUpahController::class, 'destroy'])
+            ->name('laporanupah.destroy');
+
+        Route::get('/laporan-upah/item/{item}/slip', [LaporanUpahController::class, 'slip'])
+            ->name('laporanupah.slip');
+
+        Route::get('/laporan-upah/{laporanUpah}/slip-semua', [LaporanUpahController::class, 'slipSemua'])
+            ->name('laporanupah.slip-semua');
+        // ==== END LAPORAN UPAH ====
 
         Route::view('/pengaturan', 'admin.pengaturan')
             ->name('pengaturan');

@@ -8,15 +8,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('jenis_pekerjaans', function (Blueprint $table) {
-            $table->id();
-            $table->string('kode')->unique();
-            $table->enum('jenis', ['Pemanen', 'Pemberondol', 'Pemupuk', 'Penyemprot'])->unique();
-            $table->string('satuan');
-            $table->text('keterangan')->nullable();
-            $table->string('warna', 20)->default('#5f6f52');
-            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
-            $table->timestamps();
+        Schema::table('jenis_pekerjaans', function (Blueprint $table) {
+            $table->string('jenis', 100)->change();
         });
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\JenisPekerjaan;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class JenisPekerjaanController extends Controller
 {
@@ -30,50 +31,55 @@ class JenisPekerjaanController extends Controller
         $jenisAktif = JenisPekerjaan::where('status', 'aktif')->count();
         $jenisNonaktif = JenisPekerjaan::where('status', 'nonaktif')->count();
 
-        // Jenis yang belum dipakai, buat opsi dropdown saat tambah baru
-        $jenisTerpakai = JenisPekerjaan::pluck('jenis')->toArray();
-        $jenisTersedia = array_values(array_diff(JenisPekerjaan::JENIS_OPSI, $jenisTerpakai));
-
         return view('admin.jenispekerjaan', compact(
-            'jenisPekerjaans', 'totalJenis', 'jenisAktif', 'jenisNonaktif', 'jenisTersedia'
+            'jenisPekerjaans', 'totalJenis', 'jenisAktif', 'jenisNonaktif'
         ));
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'jenis'       => ['required', 'in:' . implode(',', JenisPekerjaan::JENIS_OPSI), 'unique:jenis_pekerjaans,jenis'],
-            'satuan'      => ['required', 'string', 'max:50'],
-            'keterangan'  => ['nullable', 'string'],
-            'warna'       => ['nullable', 'string', 'max:20'],
-            'status'      => ['required', 'in:aktif,nonaktif'],
-        ]);
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'jenis'      => ['required', 'string', 'max:100', 'unique:jenis_pekerjaans,jenis'],
+        'satuan'     => ['required', 'string', 'max:50'],
+        'keterangan' => ['nullable', 'string'],
+        'warna'      => ['nullable', 'string', 'max:20'],
+        'status'     => ['required', 'in:aktif,nonaktif'],
+    ], [
+        'jenis.unique' => 'Jenis pekerjaan ini sudah ada.',
+    ]);
 
-        $lastId = JenisPekerjaan::max('id') + 1;
-        $validated['kode'] = 'JP' . str_pad($lastId, 4, '0', STR_PAD_LEFT);
+    // Kode dibuat setelah data tersimpan, supaya mengikuti id yang sebenarnya
+    $jenis = JenisPekerjaan::create($validated + ['kode' => 'TMP' . uniqid()]);
+    $jenis->update(['kode' => 'JP' . str_pad($jenis->id, 4, '0', STR_PAD_LEFT)]);
 
-        JenisPekerjaan::create($validated);
-
-        return redirect()->route('admin.jenis-pekerjaan.index')
-            ->with('status', 'Jenis pekerjaan berhasil ditambahkan.');
-    }
+    return redirect()->route('admin.jenis-pekerjaan.index')
+        ->with('status', 'Jenis pekerjaan berhasil ditambahkan.');
+}
 
     public function update(Request $request, JenisPekerjaan $jenisPekerjaan)
     {
         $validated = $request->validate([
-            'satuan'      => ['required', 'string', 'max:50'],
-            'keterangan'  => ['nullable', 'string'],
-            'warna'       => ['nullable', 'string', 'max:20'],
-            'status'      => ['required', 'in:aktif,nonaktif'],
+            'jenis' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('jenis_pekerjaans', 'jenis')
+                    ->ignore($jenisPekerjaan->id),
+            ],
+            'satuan'     => ['required', 'string', 'max:50'],
+            'keterangan' => ['nullable', 'string'],
+            'warna'      => ['nullable', 'string', 'max:20'],
+            'status'     => ['required', 'in:aktif,nonaktif'],
+        ], [
+            'jenis.unique' => 'Jenis pekerjaan ini sudah ada.',
         ]);
-
-        // 'jenis' sengaja tidak diubah lewat form, karena dipakai sebagai acuan tetap
 
         $jenisPekerjaan->update($validated);
 
         return redirect()->route('admin.jenis-pekerjaan.index')
             ->with('status', 'Jenis pekerjaan berhasil diperbarui.');
     }
+
 
     public function destroy(JenisPekerjaan $jenisPekerjaan)
     {
