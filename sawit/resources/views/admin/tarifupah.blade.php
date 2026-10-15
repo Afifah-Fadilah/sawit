@@ -545,14 +545,21 @@
         var wrapSelect = document.getElementById('wrapJenisSelect');
         var wrapText = document.getElementById('wrapJenisText');
         var fJenisText = document.getElementById('fJenisText');
+        var fJenisSelect = document.getElementById('fJenisSelect');
 
         function bukaTambah() {
             judul.textContent = 'Tambah Tarif Upah';
             methodInput.disabled = true;
             form.action = urlDasar;
+
             form.reset();
+
             wrapSelect.style.display = '';
             wrapText.style.display = 'none';
+
+            fJenisSelect.disabled = false;
+            fJenisSelect.required = true;
+
             dlgTarif.showModal();
         }
 
@@ -563,6 +570,10 @@
 
             wrapSelect.style.display = 'none';
             wrapText.style.display = '';
+
+            fJenisSelect.disabled = true;
+            fJenisSelect.required = false;
+
             fJenisText.value = data.jenis + ' (Kode: ' + data.kode + ')';
 
             form.elements['tarif'].value = data.tarif || '';

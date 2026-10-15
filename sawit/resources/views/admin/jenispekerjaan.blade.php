@@ -295,6 +295,37 @@
     }
     .kj-err { margin: 6px 0 0; color: #a33a2f; font-size: 11.5px; }
 
+    .kj-color {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 44px;
+    padding: 0 14px 0 6px;
+    border: 1px solid #d5d3bb;
+    border-radius: 10px;
+    background: #fff;
+    }
+
+    .kj-color__pick {
+        width: 36px;
+        height: 32px;
+        padding: 0;
+        border: 0;
+        border-radius: 8px;
+        background: none;
+        cursor: pointer;
+    }
+    .kj-color__pick::-webkit-color-swatch-wrapper { padding: 0; }
+    .kj-color__pick::-webkit-color-swatch { border: 0; border-radius: 8px; }
+    .kj-color__pick::-moz-color-swatch { border: 0; border-radius: 8px; }
+    .kj-color__hex {
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: .03em;
+        text-transform: uppercase;
+        color: #4a4633;
+    }
+
     .kj-dlg__actions {
         display: flex;
         justify-content: flex-end;
@@ -358,7 +389,7 @@
                     <button type="submit" class="kj-sr">Cari</button>
                 </form>
 
-                <button type="button" class="kj-btn" data-aksi="tambah" {{ count($jenisTersedia) === 0 ? 'disabled title=Semua jenis sudah ditambahkan' : '' }}>
+                <button type="button" class="kj-btn" data-aksi="tambah" >
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
                         <path d="M5 12h14"/><path d="M12 5v14"/>
                     </svg>
@@ -461,37 +492,19 @@
 
             <div class="kj-dlg__body">
                 <div class="kj-form">
-                    <div class="kj-field" id="wrapJenisSelect">
-                        <label class="kj-label" for="fJenisSelect">Jenis Pekerjaan</label>
-                        <select class="kj-select" id="fJenisSelect" name="jenis" required>
-                            @foreach ($jenisTersedia as $opsi)
-                                <option value="{{ $opsi }}" {{ old('jenis') === $opsi ? 'selected' : '' }}>{{ $opsi }}</option>
-                            @endforeach
-                        </select>
-                        @error('jenis') <p class="kj-err">{{ $message }}</p> @enderror
-                    </div>
 
-                    <div class="kj-field" id="wrapJenisText" style="display:none;">
-                        <label class="kj-label">Jenis Pekerjaan</label>
-                        <input class="kj-input" id="fJenisText" type="text" disabled>
+                    <div class="kj-field kj-field--full">
+                        <label class="kj-label" for="fJenis">Jenis Pekerjaan</label>
+                        <input class="kj-input" id="fJenis" name="jenis" type="text" maxlength="100"
+                               placeholder="Contoh: Mandor Lapangan" value="{{ old('jenis') }}" required>
+                        @error('jenis') <p class="kj-err">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="kj-field">
                         <label class="kj-label" for="fSatuan">Satuan</label>
-                        <input class="kj-input" id="fSatuan" name="satuan" type="text" maxlength="50" placeholder="Contoh: Per Kg" value="{{ old('satuan') }}" required>
+                        <input class="kj-input" id="fSatuan" name="satuan" type="text" maxlength="50"
+                               placeholder="Contoh: Per Kg" value="{{ old('satuan') }}" required>
                         @error('satuan') <p class="kj-err">{{ $message }}</p> @enderror
-                    </div>
-
-                    <div class="kj-field kj-field--full">
-                        <label class="kj-label" for="fKeterangan">Keterangan</label>
-                        <textarea class="kj-input" id="fKeterangan" name="keterangan" rows="3" placeholder="Contoh: Pekerjaan memanen buah sawit siap panen">{{ old('keterangan') }}</textarea>
-                        @error('keterangan') <p class="kj-err">{{ $message }}</p> @enderror
-                    </div>
-
-                    <div class="kj-field">
-                        <label class="kj-label" for="fWarna">Warna Label</label>
-                        <input class="kj-input" id="fWarna" name="warna" type="color" value="{{ old('warna', '#5f6f52') }}" style="height:44px; padding:4px;">
-                        @error('warna') <p class="kj-err">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="kj-field">
@@ -502,6 +515,24 @@
                         </select>
                         @error('status') <p class="kj-err">{{ $message }}</p> @enderror
                     </div>
+
+                    <div class="kj-field kj-field--full">
+                        <label class="kj-label" for="fKeterangan">Keterangan</label>
+                        <textarea class="kj-input" id="fKeterangan" name="keterangan" rows="3"
+                                  placeholder="Contoh: Pekerjaan memanen buah sawit siap panen">{{ old('keterangan') }}</textarea>
+                        @error('keterangan') <p class="kj-err">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="kj-field kj-field--full">
+                        <label class="kj-label" for="fWarna">Warna Label</label>
+                        <div class="kj-color">
+                            <input class="kj-color__pick" id="fWarna" name="warna" type="color"
+                                   value="{{ old('warna', '#5f6f52') }}">
+                            <span class="kj-color__hex" id="hexWarna">{{ old('warna', '#5f6f52') }}</span>
+                        </div>
+                        @error('warna') <p class="kj-err">{{ $message }}</p> @enderror
+                    </div>
+
                 </div>
             </div>
 
@@ -553,17 +584,20 @@
         var methodInput = document.getElementById('methodJenis');
         var namaHapus = document.getElementById('namaHapus');
         var urlDasar = form.dataset.urlDasar;
-        var wrapSelect = document.getElementById('wrapJenisSelect');
-        var wrapText = document.getElementById('wrapJenisText');
-        var fJenisText = document.getElementById('fJenisText');
+        var inputWarna = document.getElementById('fWarna');
+        var hexWarna = document.getElementById('hexWarna');
 
-        function bukaTambah() {
+        function sinkronWarna() {
+            hexWarna.textContent = inputWarna.value;
+        }
+        inputWarna.addEventListener('input', sinkronWarna);
+
+        function bukaTambah(pertahankanIsian) {
             judul.textContent = 'Tambah Jenis Pekerjaan';
             methodInput.disabled = true;
             form.action = urlDasar;
-            form.reset();
-            wrapSelect.style.display = '';
-            wrapText.style.display = 'none';
+            if (!pertahankanIsian) form.reset();
+            sinkronWarna();
             dlgJenis.showModal();
         }
 
@@ -572,14 +606,12 @@
             methodInput.disabled = false;
             form.action = urlDasar + '/' + data.id;
 
-            wrapSelect.style.display = 'none';
-            wrapText.style.display = '';
-            fJenisText.value = data.jenis;
-
+            form.elements['jenis'].value = data.jenis || '';
             form.elements['satuan'].value = data.satuan || '';
             form.elements['keterangan'].value = data.keterangan || '';
             form.elements['warna'].value = data.warna || '#5f6f52';
             form.elements['status'].value = data.status || 'aktif';
+            sinkronWarna();
 
             dlgJenis.showModal();
         }
@@ -595,14 +627,8 @@
             if (!tombol) return;
 
             var aksi = tombol.dataset.aksi;
-            if (aksi === 'tutup') {
-                tombol.closest('dialog').close();
-                return;
-            }
-            if (aksi === 'tambah') {
-                bukaTambah();
-                return;
-            }
+            if (aksi === 'tutup') { tombol.closest('dialog').close(); return; }
+            if (aksi === 'tambah') { bukaTambah(false); return; }
 
             var baris = tombol.closest('tr');
             var data = baris ? JSON.parse(baris.dataset.jenis) : null;
@@ -619,7 +645,7 @@
         });
 
         @if ($errors->any())
-            bukaTambah();
+            bukaTambah(true);
         @endif
     })();
 </script>
