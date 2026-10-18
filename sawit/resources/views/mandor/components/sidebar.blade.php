@@ -110,9 +110,35 @@
         background: #fbfaf5;
     }
     .kp-content { padding: 16px 16px 90px; }
+
+    .kp-rail__backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 39;
+        background: rgba(30, 38, 22, .45);
+    }
+
+    @media (max-width: 768px) {
+        .kp-rail {
+            transform: translateX(-100%);
+            transition: transform .2s ease;
+        }
+        .kp-rail.kp-rail--terbuka {
+            transform: translateX(0);
+        }
+        .kp-rail__backdrop.kp-rail__backdrop--terbuka {
+            display: block;
+        }
+        .kp-main {
+            margin-left: 0;
+        }
+    }
 </style>
 
-<aside class="kp-rail" aria-label="Menu utama">
+<div class="kp-rail__backdrop" id="backdropMenuMandor"></div>
+
+<aside class="kp-rail" aria-label="Menu utama" id="railMenuMandor">
     <a href="{{ url('mandor/dashboard') }}" class="kp-rail__logo">
         <img src="{{ asset('images/logo.png') }}" alt="Logo">
     </a>
@@ -142,3 +168,40 @@
         </button>
     </form>
 </aside>
+
+<script>
+    (function () {
+        var rail = document.getElementById('railMenuMandor');
+        var backdrop = document.getElementById('backdropMenuMandor');
+
+        if (!rail || !backdrop) {
+            console.error('Hamburger menu: elemen rail/backdrop tidak ditemukan di DOM.');
+            return;
+        }
+
+        function bukaMenu() {
+            rail.classList.add('kp-rail--terbuka');
+            backdrop.classList.add('kp-rail__backdrop--terbuka');
+        }
+
+        function tutupMenu() {
+            rail.classList.remove('kp-rail--terbuka');
+            backdrop.classList.remove('kp-rail__backdrop--terbuka');
+        }
+
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('#btnBukaMenuMandor')) {
+                bukaMenu();
+                return;
+            }
+            if (e.target === backdrop) {
+                tutupMenu();
+                return;
+            }
+        });
+
+        rail.querySelectorAll('.kp-rail__link').forEach(function (link) {
+            link.addEventListener('click', tutupMenu);
+        });
+    })();
+</script>
